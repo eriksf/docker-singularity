@@ -1,14 +1,14 @@
 function makeimg() {
 	IMG=${2}_${1}.img
+	size=256
 	[ -e $IMG ] && rm -f $IMG
 	case $1 in
 	2.3.2)
-		singularity create -s 100 -F ${IMG}
+		singularity create -s $size -F ${IMG}
 		singularity bootstrap ${IMG} sys.def
 		;;
 	2.4.6)
-		singularity create -s 100 -F ${IMG}
-		singularity bootstrap ${IMG} sys.def
+		singularity build ${IMG} sys.def
 		;;
 	2.5.2)
 		singularity build ${IMG} sys.def
@@ -22,7 +22,7 @@ function makeimg() {
 
 cat << EOF > sys.def
 BootStrap: docker
-From: alpine
+From: ubuntu:xenial
 %post
 	mkdir /scratch /work /home1 /gpfs /corral-repl /corral-tacc /data
 %runscript
@@ -30,13 +30,15 @@ From: alpine
 EOF
 
 makeimg $1 good
+rm -rf /root/.singularity
 
 cat << EOF > sys.def
 BootStrap: docker
-From: alpine
+From: ubuntu:xenial
 %post
 %runscript
-	echo "good singularity $1 testing image"
+	echo "bad singularity $1 testing image"
 EOF
 
 makeimg $1 bad
+rm -rf /root/.singularity

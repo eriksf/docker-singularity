@@ -1,4 +1,4 @@
-versions = 2.3.2 2.4.6 2.5.2
+versions = 2.3.2 2.5.2
 all: test_images
 
 .SILENT: docker
