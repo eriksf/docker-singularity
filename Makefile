@@ -1,5 +1,5 @@
 versions = 2.3.2 2.4.6 2.5.2
-all: $(versions)
+all: test_images
 
 .SILENT: docker
 docker:
@@ -11,10 +11,12 @@ docker:
 prune:
 	docker system prune -f
 
-2.%: docker prune
+2.%: docker
 	docker build --build-arg VERSION=$@ -t gzynda/singularity:$@ . \
 	&& docker push gzynda/singularity:$@ \
 	&& docker system prune -f
 
 test_images: $(versions)
-	for v in $(versions); do
+	for v in $(versions); do \
+		docker run --privileged -v $$PWD:/data --rm -it gzynda/singularity:$$v bash -c "cd /data && bash make_image.sh $$v"; \
+	done

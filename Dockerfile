@@ -3,7 +3,9 @@
 #    && apk cache clean
 
 FROM ubuntu:xenial
-RUN apt-get install -y build-essential libarchive-dev
+RUN apt-get update \
+    && apt-get install -y build-essential libarchive-dev wget python-dev squashfs-tools \
+    && apt-get clean
 
 ARG VERSION=2.3.2
 
@@ -11,7 +13,10 @@ RUN wget https://github.com/singularityware/singularity/releases/download/$VERSI
     && tar -xzf singularity-$VERSION.tar.gz \
     && cd singularity-$VERSION \
     && ./configure --prefix=/ \
-    && make -j2 && sudo make install \
+    && make -j2 && make install \
     && cd .. && rm -rf singularity*
+
+ADD https://raw.githubusercontent.com/singularityware/docker2singularity/master/docker2singularity.sh /bin/docker2singularity.sh
+RUN chmod a+x /bin/docker2singularity.sh
 
 RUN /bin/singularity --version
