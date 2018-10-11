@@ -1,4 +1,4 @@
-versions = 2.3.2 2.5.2
+versions = 2.3.2 2.5.2 2.6.0
 all: test_images
 
 .SILENT: docker
@@ -12,11 +12,21 @@ prune:
 	docker system prune -f
 
 2.%: docker
-	docker build --build-arg VERSION=$@ -t gzynda/singularity:$@ . \
-	&& docker push gzynda/singularity:$@ \
+	docker build --build-arg VERSION=$@ -t singularity:$@ . \
 	&& docker system prune -f
 
-test_images: $(versions)
+suid-test: 2.6.0
+	docker run --privileged -v $$PWD:/data --rm -it singularity:$@ bash -c "cd /data && bash make_image.sh $@"; \
+
+test_images: $(versions) suid-test
 	for v in $(versions); do \
-		docker run --privileged -v $$PWD:/data --rm -it gzynda/singularity:$$v bash -c "cd /data && bash make_image.sh $$v"; \
+		docker run --privileged -v $$PWD:/data --rm -it singularity:$$v bash -c "cd /data && bash make_image.sh $$v"; \
 	done
+
+clean:
+	for v in $(versions); do \
+		docker rmi singularity:$$v
+	done
+	docker system prune -f
+	rm *img
+	
