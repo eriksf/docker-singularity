@@ -1,4 +1,4 @@
-versions = 2.3.2 2.5.2 2.6.0
+versions = 2.3.2 2.4.6 2.5.2 2.6.0
 all: test_images
 
 .SILENT: docker
@@ -16,7 +16,7 @@ prune:
 	&& docker system prune -f
 
 suid-test: 2.6.0
-	docker run --privileged -v $$PWD:/data --rm -it singularity:$@ bash -c "cd /data && bash make_image.sh $@"; \
+	docker run --privileged -v $$PWD:/data --rm -it singularity:$< bash -c "cd /data && bash make_image.sh $@"; \
 
 test_images: $(versions) suid-test
 	for v in $(versions); do \
@@ -25,8 +25,7 @@ test_images: $(versions) suid-test
 
 clean:
 	for v in $(versions); do \
-		docker rmi singularity:$$v
+		docker rmi singularity:$$v; \
 	done
 	docker system prune -f
-	rm *img
-	
+	rm -f *img

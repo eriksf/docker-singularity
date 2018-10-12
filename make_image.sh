@@ -1,6 +1,6 @@
 function makeimg() {
-	IMG=${2}_${1}.img
-	size=256
+	IMG=${2}_${1}.simg
+	size=128
 	[ -e $IMG ] && rm -f $IMG
 	case $1 in
 	2.3.2)
@@ -53,7 +53,7 @@ From: ubuntu:xenial
 	echo "good singularity $1 testing image"
 EOF
 
-makeimg $1 good
+makeimg $1 tacc-mounts
 rm -rf /root/.singularity
 
 cat << EOF > sys.def
@@ -64,5 +64,5 @@ From: ubuntu:xenial
 	echo "bad singularity $1 testing image"
 EOF
 
-makeimg $1 bad
+makeimg $1 stock
 rm -rf /root/.singularity
