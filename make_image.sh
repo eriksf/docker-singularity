@@ -32,13 +32,26 @@ if [ "$1" == "suid-test" ]; then
 BootStrap: docker
 From: ubuntu:xenial
 %post
-	echo -e "#!/bin/bash\nrm -i $1" > /bin/suid_test.sh
-	chmod a+rx /bin/suid_test.sh
-	chmod u+s /bin/suid_test.sh
-	cat /bin/suid_test.sh
-	ls -lh /bin/suid_test.sh
+	apt-get update
+	apt-get install -y gcc
+	cat << "EOC" > /bin/suid_test.c
+#include <stdio.h>
+#include <unistd.h>
+
+int main () {
+  int real = getuid();
+  int euid = geteuid();
+  printf("The REAL UID =: %d\n", real);
+  printf("The EFFECTIVE UID =: %d\n", euid);
+}
+EOC
+	gcc -o /bin/suid_test /bin/suid_test.c
+	rm /bin/suid_test.c
+	chmod 4755 /bin/suid_test
+	ls -lh /bin/suid_test
+	suid_test
 %runscript
-	exec /bin/suid_test.sh "$@"
+	exec /bin/suid_test
 EOF
 	makeimg test suid
 	rm -rf /root/.singularity
