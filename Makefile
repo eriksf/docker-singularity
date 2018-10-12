@@ -1,4 +1,5 @@
-versions = 2.3.2 2.4.6 2.5.2 2.6.0
+versions = 2.3.2 2.5.2 2.6.0
+images = $(shell for v in $(versions); do echo "stock_$$v.simg"; done)
 all: test_images
 
 .SILENT: docker
@@ -18,10 +19,14 @@ prune:
 suid-test: 2.6.0
 	docker run --privileged -v $$PWD:/data --rm -it singularity:$< bash -c "cd /data && bash make_image.sh $@"; \
 
-test_images: $(versions) suid-test
-	for v in $(versions); do \
-		docker run --privileged -v $$PWD:/data --rm -it singularity:$$v bash -c "cd /data && bash make_image.sh $$v"; \
-	done
+stock_2.%.simg: 2.%
+	docker run --privileged -v $$PWD:/data --rm -it singularity:$< bash -c "cd /data && bash make_image.sh $<"; \
+
+test_images: $(images) suid-test
+	mkdir $@
+	cp *simg $@/
+	tar -czf $@.tar.gz $@
+	rm -rf $@/
 
 clean:
 	for v in $(versions); do \

@@ -8,7 +8,8 @@ function makeimg() {
 		singularity bootstrap ${IMG} sys.def
 		;;
 	2.4.6)
-		singularity build ${IMG} sys.def
+		singularity create -s $size -F ${IMG}
+		singularity bootstrap ${IMG} sys.def
 		;;
 	2.5.2)
 		singularity build ${IMG} sys.def
