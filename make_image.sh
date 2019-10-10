@@ -1,24 +1,44 @@
 function makeimg() {
-	IMG=${2}_${1}.simg
+	IMG=${2}_${1}
 	size=128
 	[ -e $IMG ] && rm -f $IMG
 	case $1 in
 	2.3.2)
-		singularity create -s $size -F ${IMG}
-		singularity bootstrap ${IMG} sys.def
+		singularity create -s $size -F ${IMG}.simg
+		singularity bootstrap ${IMG}.simg sys.def
 		;;
 	2.4.6)
-		singularity create -s $size -F ${IMG}
-		singularity bootstrap ${IMG} sys.def
+		singularity create -s $size -F ${IMG}.simg
+		singularity bootstrap ${IMG}.simg sys.def
 		;;
 	2.5.2)
-		singularity build ${IMG} sys.def
+		singularity build ${IMG}.simg sys.def
 		;;	
 	2.6.0)
-		singularity build ${IMG} sys.def
+		singularity build ${IMG}.simg sys.def
+		;;	
+	3.4.1)
+		singularity build ${IMG}.sif sys.def
+		singularity build ${IMG}.simg sys.def
+		;;	
+	3.3.0)
+		singularity build ${IMG}.sif sys.def
+		singularity build ${IMG}.simg sys.def
+		;;	
+	3.2.1)
+		singularity build ${IMG}.sif sys.def
+		singularity build ${IMG}.simg sys.def
+		;;	
+	3.1.1)
+		singularity build ${IMG}.sif sys.def
+		singularity build ${IMG}.simg sys.def
+		;;	
+	3.0.3)
+		singularity build ${IMG}.sif sys.def
+		singularity build ${IMG}.simg sys.def
 		;;	
 	test)
-		singularity build ${IMG} sys.def
+		singularity build ${IMG}.simg sys.def
 		;;	
 	*)
 		exit 1

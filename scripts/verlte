@@ -1,0 +1,7 @@
+#!/bin/bash
+
+versort() {
+	sort -s -t- -k 2,2n |  sort -t. -s -k 1,1n -k 2,2n -k 3,3n -k 4,4n
+}
+
+[ "$1" = "`echo -e "$1\n$2" | versort | head -n1`" ]
