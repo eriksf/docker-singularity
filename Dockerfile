@@ -35,7 +35,7 @@ RUN V=$(verlte ${VERSION} 2.99 && echo $VERSION || echo v${VERSION}) \
         ./mconfig && make -C ./builddir \
         && make -C ./builddir install; \
     fi \
-    && cd .. && rm -rf singularity*
+    && cd .. && rm -rf singularity* /root/.cache /root/go && ls -a /root
 
 ADD https://raw.githubusercontent.com/singularityware/docker2singularity/master/docker2singularity.sh /bin/docker2singularity.sh
 RUN chmod a+x /bin/docker2singularity.sh
