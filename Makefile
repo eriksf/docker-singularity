@@ -1,4 +1,4 @@
-versions = 2.3.2 2.5.2 2.6.0 3.2.1 3.3.0 3.4.1 3.5.3 3.6.3
+versions = 2.3.2 2.5.2 2.6.0 3.2.1 3.3.0 3.4.1 3.5.3 3.6.3 3.7.2
 images = $(shell for v in $(versions); do echo "stock_$$v.simg"; done)
 all: test_images
 
@@ -42,4 +42,4 @@ clean:
 		docker rmi $(ORG)singularity:$$v; \
 	done
 	docker system prune -f
-	rm -f *img
+	rm -f *simg *sif

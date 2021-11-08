@@ -17,6 +17,18 @@ function makeimg() {
 	2.6.0)
 		singularity build ${IMG}.simg sys.def
 		;;	
+	3.7.2)
+		singularity build ${IMG}.sif sys.def
+		singularity build ${IMG}.simg sys.def
+		;;	
+	3.6.3)
+		singularity build ${IMG}.sif sys.def
+		singularity build ${IMG}.simg sys.def
+		;;	
+	3.5.3)
+		singularity build ${IMG}.sif sys.def
+		singularity build ${IMG}.simg sys.def
+		;;	
 	3.4.1)
 		singularity build ${IMG}.sif sys.def
 		singularity build ${IMG}.simg sys.def
@@ -82,7 +94,7 @@ cat << EOF > sys.def
 BootStrap: docker
 From: ubuntu:xenial
 %post
-	mkdir /scratch /work /home1 /gpfs /corral-repl /corral-tacc /data
+	mkdir /scratch /work /work2 /home1 /gpfs /corral-repl /corral-tacc /data
 %runscript
 	echo "good singularity $1 testing image"
 EOF
